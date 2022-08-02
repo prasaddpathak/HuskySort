@@ -3,6 +3,7 @@ package edu.neu.coe.huskySort.sort.simple;
 import edu.neu.coe.huskySort.sort.ComparisonSortHelper;
 import edu.neu.coe.huskySort.sort.HelperFactory;
 import edu.neu.coe.huskySort.sort.Sort;
+import edu.neu.coe.huskySort.sort.SortWithHelper;
 import edu.neu.coe.huskySort.util.*;
 
 import java.io.IOException;
@@ -14,8 +15,6 @@ import java.util.List;
 public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
     public static final String DESCRIPTION = "QuickSort basic";
-    Double swapCount = 0.0;
-    Double compareCount = 0.0;
 
     public QuickSort_Basic(String description, int N, Config config) {
         super(description, N, config);
@@ -58,7 +57,7 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
     public class Partitioner_Basic implements Partitioner<X> {
 
-        public Partitioner_Basic(Helper<X> helper) {
+        public Partitioner_Basic(ComparisonSortHelper<X> helper) {
             this.helper = helper;
         }
 
@@ -78,25 +77,24 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
             X v = xs[from];
             int i = from;
             int j = to;
-            while (true) {
-                while (xs[++i].compareTo(v) < 0) {
-                    if (i == hi) {
-                        break;
-                    }
-//                    compareCount += 2;
+
+            if (helper.instrumented()) {
+                while (true) {
+                    while (i < hi && !helper.inverted(xs[++i], v)) {}
+                    while (j > from && !helper.inverted(v, xs[--j])) {}
+                    if (i >= j) break;
+                    helper.swap(xs, i, j);
                 }
-                while (xs[--j].compareTo(v) > 0) {
-                    if (j == from) {
-                        break;
-                    }
-//                    compareCount += 2;
+                helper.swap(xs, from, j);
+            } else {
+                while (true) {
+                    while (i < hi && xs[++i].compareTo(v) < 0) {}
+                    while (j > from && xs[--j].compareTo(v) > 0) {}
+                    if (i >= j) break;
+                    swap(xs, i, j);
                 }
-                if (i >= j) {
-                    break;
-                }
-                swap(xs, i, j);
+                swap(xs, from, j);
             }
-            swap(xs, from, j);
 
             List<Partition<X>> partitions = new ArrayList<>();
             partitions.add(new Partition<>(xs, from, j));
@@ -105,18 +103,17 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
         }
 
         private void swap(X[] ys, int i, int j) {
-//            swapCount++;
             X temp = ys[i];
             ys[i] = ys[j];
             ys[j] = temp;
         }
 
-        private final Helper<X> helper;
+        private final ComparisonSortHelper<X> helper;
     }
 
     public static void main(String args[]) throws IOException {
         Integer[] sizes = {10000, 25000, 50000, 100000, 250000, 500000};
-        Integer numberOfRuns = 30;
+        Integer numberOfRuns = 7;
         System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
         for (Integer n : sizes) {
             Double swapSum = 0.0;
@@ -126,12 +123,9 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
                 final Config config2 = Config.setupConfig("true", "", "", "", "");
                 final ComparisonSortHelper<Integer> helper = HelperFactory.create("quick sort basic", n, config2);
 
-                final Integer[] unsortedArr = helper.random(Integer.class, r -> r.nextInt(n * 17));
-//              random shuffle to avoid the worst case scenario of n^2
-                List<Integer> intList = Arrays.asList(unsortedArr);
-                Collections.shuffle(intList);
-                intList.toArray(unsortedArr);
-                Sort<Integer> s = new QuickSort_Basic(helper);
+                final Integer[] unsortedArr = helper.random(Integer.class, r -> r.nextInt(n));
+
+                QuickSort_Basic<Integer> s = new QuickSort_Basic(helper);
                 s.init(n);
                 helper.preProcess(unsortedArr);
                 Integer[] ys = s.sort(unsortedArr);
@@ -139,10 +133,8 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
                 final PrivateMethodInvoker privateMethodTester = new PrivateMethodInvoker(helper);
                 final StatPack statPack = (StatPack) privateMethodTester.invokePrivate("getStatPack");
-//                System.out.println(statPack);
                 swapSum += statPack.getStatistics(Instrumenter.SWAPS).mean();
                 compareSum += statPack.getStatistics(Instrumenter.COMPARES).mean();
-
             }
 
             Double avgSwap = swapSum / numberOfRuns;
