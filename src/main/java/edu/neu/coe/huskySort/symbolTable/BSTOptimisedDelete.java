@@ -396,59 +396,39 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
 
     public static void main(String args[]) throws IOException {
         BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
-        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
-        Class[] classes = {Comparable.class, Object.class, int.class};
-        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
-        tester.invokePrivate("setRoot", node);
-        Random random = new Random(0L);
+//        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
+//        Class[] classes = {Comparable.class, Object.class, int.class};
+//        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
+//        tester.invokePrivate("setRoot", node);
         int depth = 0;
-        for (int j = 0; j < 500; j++) {
-            List<String> keys = new ArrayList<>();
-
-            for (int i = 0; i < 10; i++) {
-                int rand = random.nextInt(200);
-                keys.add(Integer.toString(rand));
-                bst.put(Integer.toString(rand), rand);
-                bst.delete(keys.get(random.nextInt(keys.size())));
-            }
-            depth += bst.depth();
+        int n = 500;
+        int runs = n * 4;
+        int count = n / 2;
+        Random random = new Random(0L);
+        List<String> keys = new ArrayList<>();
+        for (int j = 0; j < n; j++) {
+            int rand = random.nextInt(200);
+            keys.add(Integer.toString(rand));
+            bst.put(Integer.toString(rand), rand);
         }
-        System.out.println(depth / 500);
-//        Integer[] sizes = {10000, 25000, 50000, 100000, 250000, 500000};
-//        Integer numberOfRuns = 30;
-//        Random random = new Random(0L);
-//        System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
-////        int size = 0;
-//        for (Integer n : sizes) {
-////            System.out.println(n);
-////            int size = 0;
-////            System.out.println("here 2");
-//            for (int t = 0; t < numberOfRuns; t++) {
-//                BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
-//                PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
-//                Class[] classes = {Comparable.class, Object.class, int.class};
-//                BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
-//                tester.invokePrivate("setRoot", node);
-////                bst.put(Integer.toString(random.nextInt(200)), n);
-////                System.out.println(bst);
-////                System.out.println("here 1");
-////                System.out.println("bst height after put"+ bst.size());
-//                bst.put("W", 10);
-//                System.out.println(bst);
-//                bst.delete("W");
-//                System.out.println(bst);
-//                size = bst.size(bst.root);
+        depth = bst.depth();
+        System.out.println(depth);
+        int k = 0;
+        while (k < runs) {
+            for (int i = 0; i < count; i++) {
+                int key = random.nextInt(keys.size());
+                bst.delete(keys.get(key));
+                keys.remove(key);
+                int keyToAdd = random.nextInt(200);
+                bst.put(Integer.toString(keyToAdd), keyToAdd);
+                keys.add(Integer.toString(keyToAdd));
+            }
+
+            depth += bst.depth();
+            k++;
+        }
+        System.out.println(depth / keys.size());
+
     }
-
-
-//            Double avgCompare = compareSum / numberOfRuns;
-//            Double ratio = avgSwap / avgCompare;
-
-//            System.out.println("--------------------------------------------------------");
-//            System.out.println("Array Size: "+n);
-////            System.out.println("Avg Swap Count: " + avgSwap);
-////            System.out.println("Avg Compare Count: " + avgCompare);
-//            System.out.println("Size: "+size);
-//}
 }
-//            }
+
