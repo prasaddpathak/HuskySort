@@ -74,6 +74,10 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         root = delete(root, key);
     }
 
+    public void deleteRandom(Key key) {
+        root = deleteRandom(root, key);
+    }
+
     @Override
     public void deleteMin() {
         root = deleteMin(root);
@@ -192,6 +196,35 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
             x = min(t.larger);
             x.larger = deleteMin(t.larger);
             x.smaller = t.smaller;
+        }
+        x.count = size(x.smaller) + size(x.larger) + 1;
+        return x;
+        // END
+    }
+
+    private Node deleteRandom(Node x, Key key) {
+        // FIXME by replacing the following code
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0) x.smaller = deleteRandom(x.smaller, key);
+        else if (cmp > 0) x.larger = deleteRandom(x.larger, key);
+        else {
+            if (x.larger == null) return x.smaller;
+//            if (x.smaller == null) return x.larger;
+//            favour the larger node
+            Random rd = new Random(); // creating Random object
+            boolean rand = rd.nextBoolean();
+            if (rand) {
+                Node t = x;
+                x = min(t.larger);
+                x.larger = deleteMin(t.larger);
+                x.smaller = t.smaller;
+            } else {
+                Node t = x;
+                x = min(t.smaller);
+                x.smaller = deleteMin(t.smaller);
+                x.larger = t.larger;
+            }
         }
         x.count = size(x.smaller) + size(x.larger) + 1;
         return x;
@@ -396,10 +429,6 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
 
     public static void main(String args[]) throws IOException {
         BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
-//        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
-//        Class[] classes = {Comparable.class, Object.class, int.class};
-//        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
-//        tester.invokePrivate("setRoot", node);
         int depth = 0;
         int n = 1000;
         int runs = n * 40;
@@ -424,8 +453,18 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
             k++;
         }
         System.out.println(bst.depth());
-        System.out.println(depth / keys.size());
-
+        while (k < runs) {
+            for (int i = 0; i < count; i++) {
+                int key = random.nextInt(keys.size());
+                bst.deleteRandom(keys.get(key));
+                keys.remove(key);
+                int keyToAdd = random.nextInt(10000);
+                bst.put(keyToAdd, Integer.toString(keyToAdd));
+                keys.add(keyToAdd);
+            }
+            k++;
+        }
+        System.out.println(bst.depth());
     }
 }
 
