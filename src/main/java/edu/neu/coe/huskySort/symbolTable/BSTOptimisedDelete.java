@@ -395,38 +395,35 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
     }
 
     public static void main(String args[]) throws IOException {
-        BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
+        BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
 //        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
 //        Class[] classes = {Comparable.class, Object.class, int.class};
 //        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
 //        tester.invokePrivate("setRoot", node);
         int depth = 0;
-        int n = 500;
-        int runs = n * 4;
+        int n = 2000;
+        int runs = n * 40;
         int count = n / 2;
         Random random = new Random(0L);
-        List<String> keys = new ArrayList<>();
+        List<Integer> keys = new ArrayList<>();
         for (int j = 0; j < n; j++) {
-            int rand = random.nextInt(200);
-            keys.add(Integer.toString(rand));
-            bst.put(Integer.toString(rand), rand);
+            int rand = random.nextInt(10000);
+            keys.add(rand);
+            bst.put(rand, Integer.toString(rand));
         }
-        depth = bst.depth();
-        System.out.println(depth);
         int k = 0;
         while (k < runs) {
             for (int i = 0; i < count; i++) {
                 int key = random.nextInt(keys.size());
                 bst.delete(keys.get(key));
                 keys.remove(key);
-                int keyToAdd = random.nextInt(200);
-                bst.put(Integer.toString(keyToAdd), keyToAdd);
-                keys.add(Integer.toString(keyToAdd));
+                int keyToAdd = random.nextInt(10000);
+                bst.put(keyToAdd, Integer.toString(keyToAdd));
+                keys.add(keyToAdd);
             }
-
-            depth += bst.depth();
             k++;
         }
+        System.out.println(bst.depth());
         System.out.println(depth / keys.size());
 
     }
