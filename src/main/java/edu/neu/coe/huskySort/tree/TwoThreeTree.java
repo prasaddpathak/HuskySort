@@ -4,6 +4,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+/**
+ * @author Prasad Pathak
+ * Code is referenced from https://github.com/swapnil0399/2-3-Trees
+ */
+
 public class TwoThreeTree {
 
     // Private member variables of the class
@@ -1089,34 +1094,5 @@ public class TwoThreeTree {
         // Return the height of the tree
         return height(root);
     } // height() ends here
-
-    public static void main(String args[]){
-//        System.out.println("Hello World");
-        TwoThreeTree ttt = new TwoThreeTree();
-
-//        int[] input = {25,33,14,40,6,24,56,10,38,9,17,38,20};
-//        System.out.println("Input Size: "+ input.length);
-        Random r =new Random();
-        int[] input = new int[20];
-        for(int i = 0 ; i < 15 ; i++){
-            input[i] = r.nextInt(50);
-        }
-
-        for (int n: input) {
-//            System.out.println("---------------------------------------");
-//            System.out.println("Inserting " + n);
-            ttt.insert(n);
-//            ttt.bfsList();
-        }
-        ttt.bfsList(ttt.root);
-//        System.out.println(ttt.getValueForKey(ttt.root, Nodes.DUMMY));
-//        System.out.println(ttt.getValueForKey(ttt.root, Nodes.LEFT));
-//        System.out.println(ttt.getValueForKey(ttt.root, Nodes.MIDDLE));
-//        System.out.println(ttt.getValueForKey(ttt.root, Nodes.RIGHT));
-//        System.out.println("Height: "+ ttt.height());
-
-//        System.out.println("Search for 0" + ttt.search(20));
-
-    }
 
 } // TwoThreeTree class definition ends here
