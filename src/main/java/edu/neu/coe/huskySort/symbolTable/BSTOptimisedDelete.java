@@ -401,7 +401,7 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
 //        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
 //        tester.invokePrivate("setRoot", node);
         int depth = 0;
-        int n = 2000;
+        int n = 1000;
         int runs = n * 40;
         int count = n / 2;
         Random random = new Random(0L);
