@@ -177,6 +177,30 @@ public class BSTOptimisedTest {
     }
 
     @Test
+    public void testDelete5() throws Exception {
+        BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
+        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
+        Class[] classes = {Comparable.class, Object.class, int.class};
+        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
+        tester.invokePrivate("setRoot", node);
+        bst.put("W", 57);
+        bst.deleteRandom("A");
+        assertEquals(2, bst.size(bst.root));
+    }
+
+    @Test
+    public void testDelete6() throws Exception {
+        BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
+        PrivateMethodInvoker tester = new PrivateMethodInvoker(bst);
+        Class[] classes = {Comparable.class, Object.class, int.class};
+        BSTOptimisedDelete.Node node = (BSTOptimisedDelete.Node) tester.invokePrivateExplicit("makeNode", classes, "X", 42, 0);
+        tester.invokePrivate("setRoot", node);
+        bst.put("W", 57);
+        bst.deleteBySize("A");
+        assertEquals(2, bst.size(bst.root));
+    }
+
+    @Test
     public void testSize1() {
         BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
         for (int i = 0; i < 100; i++) {
