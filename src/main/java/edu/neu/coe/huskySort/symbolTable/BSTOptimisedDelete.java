@@ -1,22 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.neu.coe.huskySort.symbolTable;
-
-import edu.neu.coe.huskySort.sort.ComparisonSortHelper;
-import edu.neu.coe.huskySort.sort.HelperFactory;
-import edu.neu.coe.huskySort.sort.Sort;
-import edu.neu.coe.huskySort.sort.simple.QuickSort_Basic;
-import edu.neu.coe.huskySort.util.Config;
-import edu.neu.coe.huskySort.util.Instrumenter;
-import edu.neu.coe.huskySort.util.PrivateMethodInvoker;
-import edu.neu.coe.huskySort.util.StatPack;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.BiFunction;;import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import java.util.function.BiFunction;
 
 /**
  * @author anvithalakshmisha
@@ -458,18 +444,17 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
 
     private void runMain(String fnName) {
         BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
-        int n = 1000;
-        int runs = n * 40;
-        int count = n / 2;
+        Integer[] n = {200, 350, 500, 650, 800, 950};
         Random random = new Random(0L);
-        List<Integer> keys = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int rand = random.nextInt(100000000);
-            bst.put(rand, Integer.toString(rand));
-            keys.add(rand);
-        }
-        int k = 0;
-        while (k < runs) {
+        for (int j = 0; j < n.length; j++) {
+            int count = n[j] / 2;
+            List<Integer> keys = new ArrayList<>();
+            System.out.println("For n = " + n[j]);
+            for (int i = 0; i < n[j]; i++) {
+                int rand = random.nextInt(100000000);
+                bst.put(rand, Integer.toString(rand));
+                keys.add(rand);
+            }
             for (int i = 0; i < count; i++) {
                 if (!keys.isEmpty()) {
                     int key = random.nextInt(keys.size());
@@ -482,13 +467,9 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
                     }
                     keys.remove(key);
                 }
-                int keyToAdd = random.nextInt(100000000);
-                bst.put(keyToAdd, Integer.toString(keyToAdd));
-                keys.add(keyToAdd);
             }
-            k++;
+            System.out.println(fnName + " " + bst.depth());
         }
-        System.out.println(fnName + " " + bst.depth());
     }
 
     public static void main(String args[]) throws IOException {
