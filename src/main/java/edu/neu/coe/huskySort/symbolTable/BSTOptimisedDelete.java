@@ -78,6 +78,10 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         root = deleteRandom(root, key);
     }
 
+    public void deleteBySize(Key key) {
+        root = deleteBySize(root, key);
+    }
+
     @Override
     public void deleteMin() {
         root = deleteMin(root);
@@ -190,7 +194,7 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         else if (cmp > 0) x.larger = delete(x.larger, key);
         else {
             if (x.larger == null) return x.smaller;
-//            if (x.smaller == null) return x.larger;
+            if (x.smaller == null) return x.larger;
 //            favour the larger node
             Node t = x;
             x = min(t.larger);
@@ -210,11 +214,36 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         else if (cmp > 0) x.larger = deleteRandom(x.larger, key);
         else {
             if (x.larger == null) return x.smaller;
-//            if (x.smaller == null) return x.larger;
-//            favour the larger node
+            if (x.smaller == null) return x.larger;
             Random rd = new Random(); // creating Random object
             boolean rand = rd.nextBoolean();
             if (rand) {
+                Node t = x;
+                x = min(t.larger);
+                x.larger = deleteMin(t.larger);
+                x.smaller = t.smaller;
+            } else {
+                Node t = x;
+                x = min(t.smaller);
+                x.smaller = deleteMin(t.smaller);
+                x.larger = t.larger;
+            }
+        }
+        x.count = size(x.smaller) + size(x.larger) + 1;
+        return x;
+        // END
+    }
+
+    private Node deleteBySize(Node x, Key key) {
+        // FIXME by replacing the following code
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0) x.smaller = deleteBySize(x.smaller, key);
+        else if (cmp > 0) x.larger = deleteBySize(x.larger, key);
+        else {
+            if (x.larger == null) return x.smaller;
+            if (x.smaller == null) return x.larger;
+            if (depth(x.larger) > depth(x.smaller)) {
                 Node t = x;
                 x = min(t.larger);
                 x.larger = deleteMin(t.larger);
@@ -427,44 +456,47 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         }
     }
 
-    public static void main(String args[]) throws IOException {
+    private void runMain(String fnName) {
         BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
-        int depth = 0;
         int n = 1000;
         int runs = n * 40;
         int count = n / 2;
         Random random = new Random(0L);
         List<Integer> keys = new ArrayList<>();
-        for (int j = 0; j < n; j++) {
-            int rand = random.nextInt(10000);
-            keys.add(rand);
+        for (int i = 0; i < n; i++) {
+            int rand = random.nextInt(100000000);
             bst.put(rand, Integer.toString(rand));
+            keys.add(rand);
         }
         int k = 0;
         while (k < runs) {
             for (int i = 0; i < count; i++) {
-                int key = random.nextInt(keys.size());
-                bst.delete(keys.get(key));
-                keys.remove(key);
-                int keyToAdd = random.nextInt(10000);
+                if (!keys.isEmpty()) {
+                    int key = random.nextInt(keys.size());
+                    if (fnName.equalsIgnoreCase("Hibbard deletion")) {
+                        bst.delete(keys.get(key));
+                    } else if (fnName.equalsIgnoreCase("Delete random")) {
+                        bst.deleteRandom(keys.get(key));
+                    } else {
+                        bst.deleteBySize(keys.get(key));
+                    }
+                    keys.remove(key);
+                }
+                int keyToAdd = random.nextInt(100000000);
                 bst.put(keyToAdd, Integer.toString(keyToAdd));
                 keys.add(keyToAdd);
             }
             k++;
         }
-        System.out.println(bst.depth());
-        while (k < runs) {
-            for (int i = 0; i < count; i++) {
-                int key = random.nextInt(keys.size());
-                bst.deleteRandom(keys.get(key));
-                keys.remove(key);
-                int keyToAdd = random.nextInt(10000);
-                bst.put(keyToAdd, Integer.toString(keyToAdd));
-                keys.add(keyToAdd);
-            }
-            k++;
-        }
-        System.out.println(bst.depth());
+        System.out.println(fnName + " " + bst.depth());
+    }
+
+    public static void main(String args[]) throws IOException {
+
+        BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
+        bst.runMain("Hibbard deletion");
+        bst.runMain("Delete random");
+        bst.runMain("Delete by size");
     }
 }
 
