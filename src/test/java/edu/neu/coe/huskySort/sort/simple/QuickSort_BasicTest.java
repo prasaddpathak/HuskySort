@@ -245,31 +245,11 @@ public class QuickSort_BasicTest {
         System.out.println("ratio of compares to swaps: " + compares*1.0/swaps);
     }
 
-//    @Test
-//    public void testPartitionWithSort() {
-//        String[] xs = new String[]{"g", "f", "e", "d", "c", "b", "a"};
-//        int n = xs.length;
-//        final Config config = ConfigTest.setupConfig("true", "0", "1", "", "");
-//        final BaseHelper<String> helper = new Helper<>("test", config);
-//        final PrivateMethodInvoker privateMethodTester = new PrivateMethodInvoker(helper);
-//        QuickSort<String> sorter = new QuickSort_Basic<>(helper);
-//        int inversions = n * (n - 1) / 2;
-//        assertEquals(inversions, helper.inversions(xs));
-//        Partitioner<String> partitioner = sorter.createPartitioner();
-//        List<Partition<String>> partitions = partitioner.partition(new Partition<>(xs, 0, xs.length));
-//        assertEquals(11, privateMethodTester.invokePrivate("getFixes"));
-//        Partition<String> p0 = partitions.get(0);
-//        sorter.sort(xs, 0, p0.to, 0);
-//        assertEquals(21, privateMethodTester.invokePrivate("getFixes"));
-//        Partition<String> p1 = partitions.get(1);
-//        sorter.sort(xs, p1.from, p1.to, 0);
-//        assertEquals(21, privateMethodTester.invokePrivate("getFixes"));
-//        int fixes = (int) privateMethodTester.invokePrivate("getFixes");
-//        // NOTE: there are at least as many fixes as inversions -- sort methods aren't necessarily perfectly efficient in terms of swaps.
-//        assertTrue(inversions <= fixes);
-//        assertEquals(0, helper.inversions(xs));
-//        assertEquals(11, privateMethodTester.invokePrivate("getSwaps"));
-//    }
+    @Test
+    public void runBenchmarks() throws IOException {
+        String[] args = {"test"};
+        QuickSort_Basic.main(args);
+    }
 
     private static String[] setupWords(final int n) {
         if (n > 36) throw new RuntimeException("cannot have n > 36");

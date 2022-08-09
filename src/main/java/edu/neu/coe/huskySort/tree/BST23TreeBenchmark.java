@@ -15,7 +15,7 @@ public class BST23TreeBenchmark {
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
-    public void benchmarkTreeInsert() {
+    private void benchmarkTreeInsert() {
 
         for (int treeSize : treeSizes) {
             // Preparing input array and tree
@@ -60,7 +60,7 @@ public class BST23TreeBenchmark {
         }
     }
 
-    public void benchmarkTreeSearch() {
+    private void benchmarkTreeSearch() {
 
         for (int treeSize : treeSizes) {
             // Preparing input array and tree
@@ -109,7 +109,7 @@ public class BST23TreeBenchmark {
         }
     }
 
-    public void benchmarkTreeHeight() {
+    private void benchmarkTreeHeight() {
         for (int treeSize : treeSizes) {
             double tttDepth = 0.0;
             double bstDepth = 0.0;

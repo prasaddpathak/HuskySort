@@ -2,14 +2,9 @@ package edu.neu.coe.huskySort.sort.simple;
 
 import edu.neu.coe.huskySort.sort.ComparisonSortHelper;
 import edu.neu.coe.huskySort.sort.HelperFactory;
-import edu.neu.coe.huskySort.sort.Sort;
-import edu.neu.coe.huskySort.sort.SortWithHelper;
 import edu.neu.coe.huskySort.util.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
@@ -112,7 +107,18 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
     }
 
     public static void main(String args[]) throws IOException {
-        Integer[] sizes = {10000, 25000, 50000, 100000, 250000, 500000};
+        Integer[] sizes = new Integer[10];
+        if (args.length !=0 &&  args[0].equals("test")) {
+            for (int i = 1; i <= sizes.length ; i++) {
+                sizes[i-1] = i*10;
+            }
+        } else {
+            int startSize = 128;
+            for (int i = 0; i < 10; i++) {
+                sizes[i] = startSize;
+                startSize *= 2;
+            }
+        }
         Integer numberOfRuns = 7;
         System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
         for (Integer n : sizes) {
