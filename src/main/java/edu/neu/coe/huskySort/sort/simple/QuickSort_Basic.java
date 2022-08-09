@@ -106,7 +106,7 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
         private final ComparisonSortHelper<X> helper;
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
         Integer[] sizes = new Integer[10];
         if (args.length !=0 &&  args[0].equals("test")) {
             for (int i = 1; i <= sizes.length ; i++) {
@@ -122,8 +122,8 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
         Integer numberOfRuns = 7;
         System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
         for (Integer n : sizes) {
-            Double swapSum = 0.0;
-            Double compareSum = 0.0;
+            double swapSum = 0.0;
+            double compareSum = 0.0;
             for (int t = 0; t < numberOfRuns; t++) {
 
                 final Config config2 = Config.setupConfig("true", "", "", "", "");
@@ -145,7 +145,7 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
             Double avgSwap = swapSum / numberOfRuns;
             Double avgCompare = compareSum / numberOfRuns;
-            Double ratio = avgSwap / avgCompare;
+            double ratio = avgSwap / avgCompare;
 
             System.out.println("--------------------------------------------------------");
             System.out.println("Array Size: " + n);
