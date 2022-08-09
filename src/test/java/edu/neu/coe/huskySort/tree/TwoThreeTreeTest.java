@@ -43,9 +43,8 @@ public class TwoThreeTreeTest {
         TwoThreeTree ttt = new TwoThreeTree();
         int treeSize = 200;
         Random r =new Random();
-        int[] inputKeys = new int[treeSize];
         for (int i = 0; i < treeSize; i++) {
-            inputKeys[i] = r.nextInt(treeSize * 3);
+            ttt.insert(r.nextInt(treeSize * 3));
         }
         int treeDepth = ttt.height();
         // Theoretically Max Depth of 23Tree cannot exceed Log2(n+1)
@@ -63,6 +62,24 @@ public class TwoThreeTreeTest {
         assertFalse(ttt.search(2));
     }
 
+    @Test
+    public void testDeleteMultiple(){
+        TwoThreeTree ttt = new TwoThreeTree();
+        int treeSize = 200;
+        Random r =new Random(5468546L);
+        int[] inputKeys = new int[treeSize];
+        for (int i = 0; i < treeSize; i++) {
+            int key = r.nextInt(treeSize * 28549);
+            inputKeys[i] = key;
+            ttt.insert(key);
+        }
+        // Random Delete
+        for (int i: inputKeys) {
+            ttt.remove(i);
+        }
+        assertTrue(ttt.numberOfNodes() < treeSize);
+    }
+
 
     @Test
     public void testNoOfNodes(){
@@ -75,5 +92,24 @@ public class TwoThreeTreeTest {
         }
         System.out.println(ttt.numberOfNodes());
         assertTrue(ttt.numberOfNodes() <= treeSize);
+    }
+
+    @Test
+    public void runBenchmarks() {
+        String[] args = {"test"};
+        BST23TreeBenchmark.main(args);
+    }
+
+    @Test
+    public void testTreePrint() {
+        TwoThreeTree ttt = new TwoThreeTree();
+        int treeSize = 20;
+        Random r =new Random(5468546L);
+        int[] inputKeys = new int[treeSize];
+        for (int i = 0; i < treeSize; i++) {
+            ttt.insert(r.nextInt(treeSize * 28549));
+        }
+        ttt.bfsList();
+        ttt.keyOrderList();
     }
 }

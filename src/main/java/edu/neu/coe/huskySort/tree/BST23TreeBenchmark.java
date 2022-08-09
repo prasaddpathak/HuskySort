@@ -9,9 +9,9 @@ import java.util.Random;
 
 public class BST23TreeBenchmark {
 
-    Random r =new Random();
-    final int[] treeSizes = {1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144};
-    final int avgRuns = 29;
+    final Random r =new Random();
+    int[] treeSizes = {1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144};
+    final int avgRuns = 1000;
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
 
@@ -55,8 +55,8 @@ public class BST23TreeBenchmark {
             }
 
             // Print benchmark PER KEY search
-            System.out.println("BST - Avg Insert Time per key(nS): " + sumTimeElapsedBST/(avgRuns * treeSize));
-            System.out.println("TTT - Avg Insert Time per key(nS): " + sumTimeElapsedTTT/(avgRuns * treeSize));
+            System.out.println("BST - Avg Insert Time per key(nS): " + sumTimeElapsedBST/((long) avgRuns * treeSize));
+            System.out.println("TTT - Avg Insert Time per key(nS): " + sumTimeElapsedTTT/((long) avgRuns * treeSize));
         }
     }
 
@@ -104,8 +104,8 @@ public class BST23TreeBenchmark {
             }
 
             // Print benchmark PER KEY search
-            System.out.println("BST - Avg Search Time per key(nS): " + sumTimeElapsedBST/(avgRuns * treeSize*7));
-            System.out.println("TTT - Avg Search Time per key(nS): " + sumTimeElapsedTTT/(avgRuns * treeSize*7));
+            System.out.println("BST - Avg Search Time per key(nS): " + sumTimeElapsedBST/((long) avgRuns * treeSize*7));
+            System.out.println("TTT - Avg Search Time per key(nS): " + sumTimeElapsedTTT/((long) avgRuns * treeSize*7));
         }
     }
 
@@ -137,8 +137,13 @@ public class BST23TreeBenchmark {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         BST23TreeBenchmark tree = new BST23TreeBenchmark();
+        // Lower the size of array for Unit Test Cases
+        if (args.length != 0) {
+            int[] treeSizes = {10,20,30,40,50,60,70,80,90,100};
+            tree.treeSizes = treeSizes.clone();
+        }
         System.out.println("Averaging benchmark over " + tree.avgRuns + " runs");
         tree.benchmarkTreeInsert();
         tree.benchmarkTreeHeight();
