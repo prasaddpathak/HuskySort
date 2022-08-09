@@ -2,14 +2,9 @@ package edu.neu.coe.huskySort.sort.simple;
 
 import edu.neu.coe.huskySort.sort.ComparisonSortHelper;
 import edu.neu.coe.huskySort.sort.HelperFactory;
-import edu.neu.coe.huskySort.sort.Sort;
-import edu.neu.coe.huskySort.sort.SortWithHelper;
 import edu.neu.coe.huskySort.util.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
@@ -111,13 +106,24 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
         private final ComparisonSortHelper<X> helper;
     }
 
-    public static void main(String args[]) throws IOException {
-        Integer[] sizes = {10000, 25000, 50000, 100000, 250000, 500000};
+    public static void main(String[] args) throws IOException {
+        Integer[] sizes = new Integer[10];
+        if (args.length !=0 &&  args[0].equals("test")) {
+            for (int i = 1; i <= sizes.length ; i++) {
+                sizes[i-1] = i*10;
+            }
+        } else {
+            int startSize = 128;
+            for (int i = 0; i < 10; i++) {
+                sizes[i] = startSize;
+                startSize *= 2;
+            }
+        }
         Integer numberOfRuns = 7;
         System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
         for (Integer n : sizes) {
-            Double swapSum = 0.0;
-            Double compareSum = 0.0;
+            double swapSum = 0.0;
+            double compareSum = 0.0;
             for (int t = 0; t < numberOfRuns; t++) {
 
                 final Config config2 = Config.setupConfig("true", "", "", "", "");
@@ -139,7 +145,7 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
 
             Double avgSwap = swapSum / numberOfRuns;
             Double avgCompare = compareSum / numberOfRuns;
-            Double ratio = avgSwap / avgCompare;
+            double ratio = avgSwap / avgCompare;
 
             System.out.println("--------------------------------------------------------");
             System.out.println("Array Size: " + n);

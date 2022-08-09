@@ -358,18 +358,6 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         Node larger = null;
         int count = 0;
 
-        @Override
-        public String toString() {
-            StringBuilder sb = new StringBuilder("Node: " + key + ":" + value);
-            if (smaller != null) {
-                sb.append(", smaller: ").append(smaller.key);
-            }
-            if (larger != null) {
-                sb.append(", larger: ").append(larger.key);
-            }
-            return sb.toString();
-        }
-
     }
 
     private Node makeNode(Key key, Value value, int depth) {
@@ -401,16 +389,12 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         sb.append(node.value);
         sb.append("\n");
         if (node.smaller != null) {
-            for (int i = 0; i <= indent; i++) {
-                sb.append("  ");
-            }
+            sb.append("  ".repeat(Math.max(0, indent + 1)));
             sb.append("smaller: ");
             show(node.smaller, sb, indent + 1);
         }
         if (node.larger != null) {
-            for (int i = 0; i <= indent; i++) {
-                sb.append("  ");
-            }
+            sb.append("  ".repeat(Math.max(0, indent + 1)));
             sb.append("larger: ");
             show(node.larger, sb, indent + 1);
         }
@@ -446,11 +430,11 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
         Integer[] n = {200, 350, 500, 650, 800, 950};
         Random random = new Random(0L);
-        for (int j = 0; j < n.length; j++) {
-            int count = n[j] / 2;
+        for (Integer integer : n) {
+            int count = integer / 2;
             List<Integer> keys = new ArrayList<>();
-            System.out.println("For n = " + n[j]);
-            for (int i = 0; i < n[j]; i++) {
+            System.out.println("For n = " + integer);
+            for (int i = 0; i < integer; i++) {
                 int rand = random.nextInt(100000000);
                 bst.put(rand, Integer.toString(rand));
                 keys.add(rand);
@@ -472,7 +456,7 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
         }
     }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
         bst.runMain("Hibbard deletion");

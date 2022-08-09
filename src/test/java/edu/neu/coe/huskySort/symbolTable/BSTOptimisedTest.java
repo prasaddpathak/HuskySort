@@ -5,6 +5,8 @@
 package edu.neu.coe.huskySort.symbolTable;
 
 import edu.neu.coe.huskySort.util.PrivateMethodInvoker;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -270,7 +272,6 @@ public class BSTOptimisedTest {
         assertEquals(3, bst.depth());
     }
 
-    @Ignore
     @Test
     public void testOptimisedDeleteOfNode() throws Exception {
         BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
@@ -287,10 +288,10 @@ public class BSTOptimisedTest {
         assertEquals(8, bst.size(bst.root));
 
         // test : delete and replace with predecessor
-        // acccessing node with key"20"
+        // accessing node with key"20"
         assertEquals(2, bst.size(bst.root.larger.smaller));
         assertEquals(1, bst.size(bst.root.larger.larger));
-        bst.delete("20");
+        bst.deleteBySize("20");
         assertEquals(1, bst.size(bst.root.larger.smaller));
         assertEquals(1, bst.size(bst.root.larger.larger));
 
@@ -304,5 +305,21 @@ public class BSTOptimisedTest {
         assertEquals(0, bst.size(bst.root.larger.larger.smaller));
         assertEquals(0, bst.size(bst.root.larger.larger.larger));
 
+    }
+
+    @Test
+    public void runBenchmarks() throws IOException {
+        String[] args = {"test"};
+        BSTOptimisedDelete.main(args);
+    }
+
+    @Test
+    public void testToString() {
+        BSTOptimisedDelete<String, Integer> bst = new BSTOptimisedDelete<>();
+        bst.put("15", 15);
+        bst.put("10", 10);
+        bst.put("20", 20);
+        bst.put("08", 8);
+        bst.toString();
     }
 }
