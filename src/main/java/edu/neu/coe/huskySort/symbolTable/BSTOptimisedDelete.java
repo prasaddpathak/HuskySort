@@ -427,32 +427,36 @@ public class BSTOptimisedDelete<Key extends Comparable<Key>, Value> implements B
     }
 
     private void runMain(String fnName) {
-        BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
-        Integer[] n = {200, 350, 500, 650, 800, 950};
+        int[] n = {16, 32, 64, 128, 256, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2048, 4096};
         Random random = new Random(0L);
         for (Integer integer : n) {
             int count = integer / 2;
-            List<Integer> keys = new ArrayList<>();
+            int depth = 0;
             System.out.println("For n = " + integer);
-            for (int i = 0; i < integer; i++) {
-                int rand = random.nextInt(100000000);
-                bst.put(rand, Integer.toString(rand));
-                keys.add(rand);
-            }
-            for (int i = 0; i < count; i++) {
-                if (!keys.isEmpty()) {
-                    int key = random.nextInt(keys.size());
-                    if (fnName.equalsIgnoreCase("Hibbard deletion")) {
-                        bst.delete(keys.get(key));
-                    } else if (fnName.equalsIgnoreCase("Delete random")) {
-                        bst.deleteRandom(keys.get(key));
-                    } else {
-                        bst.deleteBySize(keys.get(key));
-                    }
-                    keys.remove(key);
+            for (int j = 0; j < 1000; j++) {
+                BSTOptimisedDelete<Integer, String> bst = new BSTOptimisedDelete<>();
+                List<Integer> keys = new ArrayList<>();
+                for (int i = 0; i < integer; i++) {
+                    int rand = random.nextInt(100000000);
+                    bst.put(rand, Integer.toString(rand));
+                    keys.add(rand);
                 }
+                for (int i = 0; i < count; i++) {
+                    if (!keys.isEmpty()) {
+                        int key = random.nextInt(keys.size());
+                        if (fnName.equalsIgnoreCase("Hibbard deletion")) {
+                            bst.delete(keys.get(key));
+                        } else if (fnName.equalsIgnoreCase("Delete random")) {
+                            bst.deleteRandom(keys.get(key));
+                        } else {
+                            bst.deleteBySize(keys.get(key));
+                        }
+                        keys.remove(key);
+                    }
+                }
+                depth += bst.depth();
             }
-            System.out.println(fnName + " " + bst.depth());
+            System.out.println(fnName + " " + depth / 1000);
         }
     }
 
