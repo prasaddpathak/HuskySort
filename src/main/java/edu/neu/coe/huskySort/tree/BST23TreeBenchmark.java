@@ -10,7 +10,7 @@ import java.util.Random;
 public class BST23TreeBenchmark {
 
     final Random r =new Random();
-    int[] treeSizes = {1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144};
+    int[] treeSizes = {128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536};
     final int avgRuns = 1000;
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
