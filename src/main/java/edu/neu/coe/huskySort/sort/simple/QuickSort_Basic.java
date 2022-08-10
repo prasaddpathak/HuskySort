@@ -107,23 +107,29 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
     }
 
     public static void main(String[] args) throws IOException {
-        Integer[] sizes = new Integer[10];
+        Integer[] sizes = new Integer[17];
         if (args.length !=0 &&  args[0].equals("test")) {
             for (int i = 1; i <= sizes.length ; i++) {
                 sizes[i-1] = i*10;
             }
         } else {
-            int startSize = 128;
-            for (int i = 0; i < 10; i++) {
+            int startSize = 16;
+            for (int i = 0; i < 17; i++) {
                 sizes[i] = startSize;
                 startSize *= 2;
             }
         }
-        Integer numberOfRuns = 7;
+        Integer numberOfRuns = 1000;
         System.out.println("Averaging Benchmarks across " + numberOfRuns + " runs");
         for (Integer n : sizes) {
             double swapSum = 0.0;
             double compareSum = 0.0;
+            if (n > 8000) {
+                numberOfRuns = 100;
+            }
+            if(n > 64000) {
+                numberOfRuns = 3;
+            }
             for (int t = 0; t < numberOfRuns; t++) {
 
                 final Config config2 = Config.setupConfig("true", "", "", "", "");
@@ -143,11 +149,12 @@ public class QuickSort_Basic<X extends Comparable<X>> extends QuickSort<X> {
                 compareSum += statPack.getStatistics(Instrumenter.COMPARES).mean();
             }
 
-            Double avgSwap = swapSum / numberOfRuns;
-            Double avgCompare = compareSum / numberOfRuns;
+            double avgSwap = swapSum / numberOfRuns;
+            double avgCompare = compareSum / numberOfRuns;
             double ratio = avgSwap / avgCompare;
 
             System.out.println("--------------------------------------------------------");
+            System.out.println("Runs: " + numberOfRuns);
             System.out.println("Array Size: " + n);
             System.out.println("Avg Swap Count: " + avgSwap);
             System.out.println("Avg Compare Count: " + avgCompare);
