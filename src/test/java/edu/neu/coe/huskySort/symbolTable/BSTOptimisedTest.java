@@ -306,7 +306,7 @@ public class BSTOptimisedTest {
         assertEquals(0, bst.size(bst.root.larger.larger.larger));
 
     }
-
+    @Ignore
     @Test
     public void runBenchmarks() throws IOException {
         String[] args = {"test"};
